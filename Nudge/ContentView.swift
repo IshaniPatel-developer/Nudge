@@ -1,86 +1,100 @@
-//
-//  ContentView.swift
-//  Nudge
-//
-//  Created by Ishani Patel on 04/07/26.
-//
-
 import SwiftUI
-import CoreData
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
-
+    @Environment(\.compositionRoot) private var compositionRoot
+    @StateObject private var router: AppRouter
+    
+    init(router: AppRouter) {
+        _router = StateObject(wrappedValue: router)
+    }
+    
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
+        Group {
+            switch router.selectedTab {
+            case .home:
+                NavigationStack(path: $router.path) {
+                    DashboardView(viewModel: compositionRoot.makeDashboardViewModel())
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+            case .dose:
+                NavigationStack {
+                    DoseHistoryView(viewModel: compositionRoot.makeDoseHistoryViewModel())
                 }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
+            case .vitals:
+                NavigationStack {
+                    VitalsView(viewModel: compositionRoot.makeVitalsViewModel())
                 }
             }
-            Text("Select an item")
         }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            // Custom Tab Bar View matching Figma mockup
+            VStack(spacing: 0) {
+                Divider()
+                    .background(Color.white.opacity(0.08))
+                
+                HStack(spacing: 0) {
+                    // Home
+                    TabBarItem(
+                        title: "Home",
+                        imageName: "home",
+                        isSelected: router.selectedTab == .home,
+                        action: { router.selectedTab = .home }
+                    )
+                    
+                    // Dose
+                    TabBarItem(
+                        title: "Dose",
+                        imageName: "dose",
+                        isSelected: router.selectedTab == .dose,
+                        action: { router.selectedTab = .dose }
+                    )
+                    
+                    // Vitals
+                    TabBarItem(
+                        title: "Vitals",
+                        imageName: "heart",
+                        isSelected: router.selectedTab == .vitals,
+                        action: { router.selectedTab = .vitals }
+                    )
+                }
+                .padding(.vertical, 8)
+                .background(Color.black.ignoresSafeArea(edges: .bottom))
             }
         }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
+        .environmentObject(router)
     }
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
+// MARK: - Custom Tab Bar Item View
+struct TabBarItem: View {
+    let title: String
+    let imageName: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                Image(imageName)
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22, height: 22)
+                    .foregroundColor(isSelected ? AppColors.brandBlue : AppColors.textSecondary)
+                
+                Text(title)
+                    .font(.system(size: 11, weight: isSelected ? .medium : .regular))
+                    .foregroundColor(isSelected ? AppColors.brandBlue : AppColors.textSecondary)
+            }
+            .frame(maxWidth: .infinity)
+            .contentShape(Rectangle()) // Make the entire layout block interactive
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
 
 #Preview {
-    ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    let root = CompositionRoot()
+    return ContentView(router: root.router)
+        .environment(\.compositionRoot, root)
 }

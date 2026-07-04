@@ -1,21 +1,14 @@
-//
-//  NudgeApp.swift
-//  Nudge
-//
-//  Created by Ishani Patel on 04/07/26.
-//
-
 import SwiftUI
-import CoreData
 
 @main
 struct NudgeApp: App {
-    let persistenceController = PersistenceController.shared
+    private let compositionRoot = CompositionRoot()
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            ContentView(router: compositionRoot.router)
+                .environment(\.compositionRoot, compositionRoot)
+                .preferredColorScheme(.dark)
         }
     }
 }

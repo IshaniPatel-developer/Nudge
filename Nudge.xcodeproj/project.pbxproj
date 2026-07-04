@@ -6,13 +6,37 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		38AE10382EDDC78E8A0AD99E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA4189E774181C4256368ED4 /* Foundation.framework */; };
+		3DF149692BD882A86AC78263 /* LifestyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EEA7237F3D8F97B4AA2FD3 /* LifestyleTests.swift */; };
+		63DA93B78F43BD1E4D5636B1 /* DoseCalculationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA424EBC96756B55A5000B1 /* DoseCalculationTests.swift */; };
+		76BD93475DD445F0FD9E868A /* CountdownTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AC5844DC1C94B9433DE472 /* CountdownTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		39C5FEF11DC6A055A2C68FDF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 96AD0F022FF8EF4400278786 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 96AD0F092FF8EF4500278786;
+			remoteInfo = Nudge;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		01EEA7237F3D8F97B4AA2FD3 /* LifestyleTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LifestyleTests.swift; sourceTree = "<group>"; };
+		3DA424EBC96756B55A5000B1 /* DoseCalculationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DoseCalculationTests.swift; sourceTree = "<group>"; };
+		77AC5844DC1C94B9433DE472 /* CountdownTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CountdownTests.swift; sourceTree = "<group>"; };
 		96AD0F0A2FF8EF4500278786 /* Nudge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nudge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA4189E774181C4256368ED4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		E92DA4B8502E180A44DC7100 /* NudgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NudgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		96AD0F0C2FF8EF4500278786 /* Nudge */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = Nudge;
 			sourceTree = "<group>";
 		};
@@ -29,11 +53,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		63954951776D9D472EE960C8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EC5A513E36CC9E91DEF27536 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		96AD0F012FF8EF4400278786 = {
 			isa = PBXGroup;
 			children = (
 				96AD0F0C2FF8EF4500278786 /* Nudge */,
 				96AD0F0B2FF8EF4500278786 /* Products */,
+				63954951776D9D472EE960C8 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -41,8 +74,17 @@
 			isa = PBXGroup;
 			children = (
 				96AD0F0A2FF8EF4500278786 /* Nudge.app */,
+				E92DA4B8502E180A44DC7100 /* NudgeTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		EC5A513E36CC9E91DEF27536 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				BA4189E774181C4256368ED4 /* Foundation.framework */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -64,8 +106,6 @@
 				96AD0F0C2FF8EF4500278786 /* Nudge */,
 			);
 			name = Nudge;
-			packageProductDependencies = (
-			);
 			productName = Nudge;
 			productReference = 96AD0F0A2FF8EF4500278786 /* Nudge.app */;
 			productType = "com.apple.product-type.application";
@@ -125,6 +165,39 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		2FA28D5B26B56701EF662723 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ishani.patel.NudgeTests;
+				PRODUCT_NAME = NudgeTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nudge.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Nudge";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		784D85D83C6C5917AFDC4D85 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ishani.patel.NudgeTests;
+				PRODUCT_NAME = NudgeTests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nudge.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Nudge";
+			};
+			name = Debug;
+		};
 		96AD0F182FF8EF4600278786 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
