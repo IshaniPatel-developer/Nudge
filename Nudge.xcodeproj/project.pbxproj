@@ -7,29 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		38AE10382EDDC78E8A0AD99E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA4189E774181C4256368ED4 /* Foundation.framework */; };
-		3DF149692BD882A86AC78263 /* LifestyleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EEA7237F3D8F97B4AA2FD3 /* LifestyleTests.swift */; };
-		63DA93B78F43BD1E4D5636B1 /* DoseCalculationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA424EBC96756B55A5000B1 /* DoseCalculationTests.swift */; };
-		76BD93475DD445F0FD9E868A /* CountdownTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AC5844DC1C94B9433DE472 /* CountdownTests.swift */; };
+		4EFE173B8AD06B79883B0B14 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A03678C41A40D0C50F7A6447 /* Inter-Medium.ttf */; };
+		9C7383946D898DDD4137B157 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F2623ECE3B173746AAA63FB /* Inter-SemiBold.ttf */; };
+		DBB9BFD7BC51E6DC66E3B047 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EBEB2A6E1E54D9A575FA510C /* Inter-Bold.ttf */; };
+		DF3A618FC7D37DF17EFDFEEA /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3E7EAE9574A1C27346F862D2 /* Inter-Regular.ttf */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		39C5FEF11DC6A055A2C68FDF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 96AD0F022FF8EF4400278786 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 96AD0F092FF8EF4500278786;
-			remoteInfo = Nudge;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		01EEA7237F3D8F97B4AA2FD3 /* LifestyleTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LifestyleTests.swift; sourceTree = "<group>"; };
-		3DA424EBC96756B55A5000B1 /* DoseCalculationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DoseCalculationTests.swift; sourceTree = "<group>"; };
-		77AC5844DC1C94B9433DE472 /* CountdownTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CountdownTests.swift; sourceTree = "<group>"; };
+		3E7EAE9574A1C27346F862D2 /* Inter-Regular.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "org.khronos.opentype-font"; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
+		6F2623ECE3B173746AAA63FB /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "org.khronos.opentype-font"; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		96AD0F0A2FF8EF4500278786 /* Nudge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nudge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A03678C41A40D0C50F7A6447 /* Inter-Medium.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "org.khronos.opentype-font"; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
 		BA4189E774181C4256368ED4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		E92DA4B8502E180A44DC7100 /* NudgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NudgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EBEB2A6E1E54D9A575FA510C /* Inter-Bold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "org.khronos.opentype-font"; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -53,6 +44,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		45527A3D60E03DA110125DE9 /* InterFonts */ = {
+			isa = PBXGroup;
+			children = (
+				3E7EAE9574A1C27346F862D2 /* Inter-Regular.ttf */,
+				A03678C41A40D0C50F7A6447 /* Inter-Medium.ttf */,
+				6F2623ECE3B173746AAA63FB /* Inter-SemiBold.ttf */,
+				EBEB2A6E1E54D9A575FA510C /* Inter-Bold.ttf */,
+			);
+			name = InterFonts;
+			path = Nudge/Resources/Fonts;
+			sourceTree = "<group>";
+		};
 		63954951776D9D472EE960C8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -67,6 +70,7 @@
 				96AD0F0C2FF8EF4500278786 /* Nudge */,
 				96AD0F0B2FF8EF4500278786 /* Products */,
 				63954951776D9D472EE960C8 /* Frameworks */,
+				45527A3D60E03DA110125DE9 /* InterFonts */,
 			);
 			sourceTree = "<group>";
 		};
@@ -149,6 +153,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF3A618FC7D37DF17EFDFEEA /* Inter-Regular.ttf in Resources */,
+				4EFE173B8AD06B79883B0B14 /* Inter-Medium.ttf in Resources */,
+				9C7383946D898DDD4137B157 /* Inter-SemiBold.ttf in Resources */,
+				DBB9BFD7BC51E6DC66E3B047 /* Inter-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,39 +173,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		2FA28D5B26B56701EF662723 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ishani.patel.NudgeTests;
-				PRODUCT_NAME = NudgeTests;
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nudge.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Nudge";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		784D85D83C6C5917AFDC4D85 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ishani.patel.NudgeTests;
-				PRODUCT_NAME = NudgeTests;
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nudge.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Nudge";
-			};
-			name = Debug;
-		};
 		96AD0F182FF8EF4600278786 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -250,6 +225,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_UIAppFonts = "Inter-Regular.ttf Inter-Medium.ttf Inter-SemiBold.ttf Inter-Bold.ttf";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -307,6 +283,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_UIAppFonts = "Inter-Regular.ttf Inter-Medium.ttf Inter-SemiBold.ttf Inter-Bold.ttf";
 				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -326,6 +303,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIAppFonts = "Inter-Regular.ttf Inter-Medium.ttf Inter-SemiBold.ttf Inter-Bold.ttf";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -357,6 +335,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIAppFonts = "Inter-Regular.ttf Inter-Medium.ttf Inter-SemiBold.ttf Inter-Bold.ttf";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

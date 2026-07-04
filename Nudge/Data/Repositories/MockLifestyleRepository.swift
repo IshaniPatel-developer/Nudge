@@ -3,56 +3,72 @@ import Foundation
 public final class MockLifestyleRepository: LifestyleRepositoryProtocol {
     private var logs: [LifestyleLog] = []
     private let lock = NSLock()
-    
+
     public init() {
         let dates = Date.last7Days
-        
-        // Pre-calculated realistic metric totals for each of the 7 days (index 6 is today)
-        let waterValues = [2300.0, 2600.0, 1900.0, 2550.0, 2100.0, 2750.0, 1250.0]
-        let weightValues = [82.0, 82.2, 81.9, 82.5, 82.1, 82.3, 82.4]
-        let stepsValues = [9200.0, 10800.0, 8100.0, 11200.0, 7800.0, 12400.0, 4200.0]
-        
-        for i in 0..<dates.count {
-            let date = dates[i]
-            
-            // Generate multiple granular log entries per day for realism
-            let morningTime = date.addingTimeInterval(3600 * 9)   // 9:00 AM
-            let afternoonTime = date.addingTimeInterval(3600 * 14) // 2:00 PM
-            let eveningTime = date.addingTimeInterval(3600 * 19)   // 7:00 PM
-            
-            // Seed Water logs (split across morning & afternoon)
-            logs.append(LifestyleLog(metricId: LifestyleMetric.water.id, value: waterValues[i] * 0.4, date: morningTime))
-            logs.append(LifestyleLog(metricId: LifestyleMetric.water.id, value: waterValues[i] * 0.6, date: afternoonTime))
-            
-            // Seed Weight logs (logged once a day in the morning)
-            logs.append(LifestyleLog(metricId: LifestyleMetric.weight.id, value: weightValues[i], date: morningTime))
-            
-            // Seed Steps logs (aggregated log at evening)
-            logs.append(LifestyleLog(metricId: LifestyleMetric.steps.id, value: stepsValues[i], date: eveningTime))
+
+        // Realistic daily totals for the past 7 days (index 6 = today).
+        // Today's values are intentionally partial (mid-day progress).
+        let waterValues:  [Double] = [2300, 2600, 1900, 2550, 2100, 2750, 1100]  // ml, today = 1100ml
+        let weightValues: [Double] = [82.4, 82.2, 82.0, 81.8, 81.9, 82.1, 82.0] // kg, taken once/day
+        let stepsValues:  [Double] = [9200, 10800, 8100, 11200, 7800, 12400, 4600] // steps, today = 4600
+
+        for (i, date) in dates.enumerated() {
+            let morning   = date.addingTimeInterval(3600 * 8)    //  8:00 AM
+            let afternoon = date.addingTimeInterval(3600 * 13)   //  1:00 PM
+            let evening   = date.addingTimeInterval(3600 * 19)   //  7:00 PM
+
+            let isToday = i == dates.count - 1
+
+            // --- Water (split morning / afternoon; today only morning so far) ---
+            if isToday {
+                // One morning drink logged so far today
+                logs.append(LifestyleLog(metricId: LifestyleMetric.water.id,
+                                         value: waterValues[i],
+                                         date: morning))
+            } else {
+                logs.append(LifestyleLog(metricId: LifestyleMetric.water.id,
+                                         value: waterValues[i] * 0.45, date: morning))
+                logs.append(LifestyleLog(metricId: LifestyleMetric.water.id,
+                                         value: waterValues[i] * 0.55, date: afternoon))
+            }
+
+            // --- Weight (one reading per day, morning) ---
+            logs.append(LifestyleLog(metricId: LifestyleMetric.weight.id,
+                                     value: weightValues[i],
+                                     date: morning))
+
+            // --- Steps (aggregated at evening, today only so far mid-day) ---
+            if isToday {
+                logs.append(LifestyleLog(metricId: LifestyleMetric.steps.id,
+                                         value: stepsValues[i],
+                                         date: afternoon))
+            } else {
+                logs.append(LifestyleLog(metricId: LifestyleMetric.steps.id,
+                                         value: stepsValues[i],
+                                         date: evening))
+            }
         }
     }
-    
+
     public func getLogs(for metric: LifestyleMetric, since startDate: Date) async throws -> [LifestyleLog] {
-        try await Task.sleep(nanoseconds: 80_000_000)
+        try await Task.sleep(nanoseconds: 60_000_000) // 60 ms simulated latency
         lock.lock()
         defer { lock.unlock() }
-        
         return logs.filter { $0.metricId == metric.id && $0.date >= startDate }
     }
-    
+
     public func saveLog(_ log: LifestyleLog) async throws {
-        try await Task.sleep(nanoseconds: 80_000_000)
+        try await Task.sleep(nanoseconds: 60_000_000)
         lock.lock()
         defer { lock.unlock() }
-        
         logs.append(log)
     }
-    
+
     public func deleteLog(_ id: UUID) async throws {
-        try await Task.sleep(nanoseconds: 80_000_000)
+        try await Task.sleep(nanoseconds: 60_000_000)
         lock.lock()
         defer { lock.unlock() }
-        
         logs.removeAll { $0.id == id }
     }
 }

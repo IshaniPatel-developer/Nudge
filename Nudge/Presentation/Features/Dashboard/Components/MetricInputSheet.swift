@@ -1,144 +1,153 @@
 import SwiftUI
-import Combine
 
 public struct MetricInputSheet: View {
     private let metric: LifestyleMetric
     private let onLog: (Double) -> Void
-    
-    @State private var inputValue = ""
+
+    @State private var inputText = ""
     @Environment(\.dismiss) private var dismiss
-    
+
     public init(metric: LifestyleMetric, onLog: @escaping (Double) -> Void) {
         self.metric = metric
         self.onLog = onLog
     }
-    
-    private var quickIncrements: [Double] {
+
+    // Quick-add increment values in their corresponding display units
+    private var quickIncrements: [(label: String, value: Double)] {
         switch metric {
-        case .water: return [250, 500, 750] // in ml
-        case .weight: return [0.5, 1.0, 2.0] // in kg
-        case .steps: return [1000, 3000, 5000] // in steps
+        case .water:  return [("250ml", 0.25), ("500ml", 0.5), ("750ml", 0.75)]
+        case .steps:  return [("1k", 1000), ("3k", 3000), ("5k", 5000)]
+        case .weight: return [("+0.5kg", 0.5), ("+1kg", 1.0), ("+2kg", 2.0)]
         }
     }
-    
+
+    private var displayUnit: String {
+        switch metric {
+        case .water:  return "L"
+        case .weight: return "kg"
+        case .steps:  return "steps"
+        }
+    }
+
+    private var themeColor: Color {
+        switch metric {
+        case .water:  return Color(hex: "#3B82F6") // Blue
+        case .steps:  return Color(hex: "#10B981") // Green
+        case .weight: return Color(hex: "#D946EF") // Purple
+        }
+    }
+
+    private var parsedValue: Double {
+        Double(inputText.replacingOccurrences(of: ",", with: ".")) ?? 0.0
+    }
+
     public var body: some View {
         VStack(spacing: 0) {
-            Spacer() // Transparent top half — underlying screen shows through
-            
+            // Drag indicator
+            Capsule()
+                .fill(Color.white.opacity(0.15))
+                .frame(width: 36, height: 5)
+                .padding(.top, 14)
+
             VStack(spacing: 24) {
-                
-                // Sheet Drag Handle Indicator
-                Capsule()
-                    .fill(Color.white.opacity(0.12))
-                    .frame(width: 36, height: 5)
-                    .padding(.top, 12)
-                
-                Text("Log \(metric.title.replacingOccurrences(of: "Daily ", with: ""))")
+                // Header: Plain centered title (no icon)
+                Text("Log \(metric.title)")
                     .font(AppTypography.bodySemibold)
                     .foregroundColor(.white)
-                
-                // Massive Readout - Borderless Tappable TextField + Unit Label
+                    .padding(.top, 6)
+
+                // Large number input field
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    TextField(calculatePlaceholder(), text: $inputValue)
-                        .keyboardType(.decimalPad)
+                    TextField("0", text: $inputText)
+                        .keyboardType(metric == .steps ? .numberPad : .decimalPad)
                         .font(.system(size: 64, weight: .bold, design: .rounded))
-                        .foregroundColor(AppColors.brandBlue)
+                        .foregroundColor(themeColor)
                         .multilineTextAlignment(.trailing)
-                        .frame(width: 160) // bounds width to keep it centered
-                    
+                        .frame(maxWidth: 180)
+
                     Text(displayUnit)
-                        .font(.system(size: 24, weight: .semibold, design: .rounded))
+                        .font(.system(size: 22, weight: .semibold, design: .rounded))
                         .foregroundColor(AppColors.textSecondary)
                 }
-                
-                // Quick-add bubbles matching mockup style
+
+                // Quick-add pills matching the Figma style
                 HStack(spacing: 12) {
-                    ForEach(quickIncrements, id: \.self) { val in
+                    ForEach(quickIncrements, id: \.label) { increment in
                         Button(action: {
-                            let increment = metric == .water ? val / 1000.0 : val
-                            if let currentNum = Double(inputValue) {
-                                inputValue = String(format: metric == .steps ? "%.0f" : "%.1f", currentNum + increment)
-                            } else {
-                                inputValue = String(format: metric == .steps ? "%.0f" : "%.1f", increment)
-                            }
+                            let newVal = parsedValue + increment.value
+                            inputText = formatForDisplay(newVal)
                         }) {
-                            Text("+\(formatQuick(val))\(quickUnit)")
-                                .font(AppTypography.bodySemibold)
-                                .foregroundColor(AppColors.brandBlue)
-                                .padding(.vertical, 12)
+                            Text("+\(increment.label)")
+                                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                .foregroundColor(themeColor)
+                                .padding(.vertical, 14)
                                 .frame(maxWidth: .infinity)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .stroke(AppColors.brandBlue.opacity(0.4), lineWidth: 1.5)
-                                        .background(Color.black.opacity(0.2))
+                                        .stroke(themeColor.opacity(0.4), lineWidth: 1.5)
+                                        .background(Color.white.opacity(0.02).cornerRadius(12))
                                 )
                         }
                     }
                 }
-                .padding(.horizontal)
-                .padding(.vertical, 8)
-                
-                // Save and Cancel buttons
+
+                // Action buttons
                 VStack(spacing: 16) {
+                    // Save Button
                     Button(action: {
-                        let loggedVal = Double(inputValue) ?? 0.0
-                        if loggedVal > 0 {
-                            // If water, user typed in Liters, convert back to ml for Mock DB compatibility
-                            let logValue = metric == .water ? loggedVal * 1000.0 : loggedVal
-                            onLog(logValue)
-                            dismiss()
-                        }
+                        let val = parsedValue
+                        guard val > 0 else { return }
+                        
+                        // For water, display unit is L but database expects ml, so convert back on save
+                        let loggedValue = (metric == .water) ? (val * 1000.0) : val
+                        onLog(loggedValue)
+                        dismiss()
                     }) {
                         Text("Save")
                             .font(AppTypography.bodySemibold)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
-                            .background(AppColors.brandBlue)
+                            .background(themeColor.opacity(parsedValue > 0 ? 1.0 : 0.5))
                             .cornerRadius(14)
                     }
                     .buttonStyle(ScaleButtonStyle())
-                    
+                    .disabled(parsedValue <= 0)
+
+                    // Cancel Button
                     Button(action: { dismiss() }) {
                         Text("Cancel")
                             .font(AppTypography.bodySemibold)
                             .foregroundColor(AppColors.textSecondary)
                     }
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 24)
+                .padding(.top, 4)
             }
-            .background(
-                AppColors.darkCardBackground
-                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                    .ignoresSafeArea(edges: .bottom)
-            )
+            .padding(.horizontal, 24)
+            .padding(.bottom, 28)
         }
-        .presentationDetents([.large])
-        .presentationBackground(.clear)
+        .frame(maxWidth: .infinity)
+        .presentationDetents([.height(390)])
+        .presentationBackground(AppColors.darkCardBackground)
+        .presentationCornerRadius(28)
+        .presentationDragIndicator(.hidden)
+        .onAppear {
+            // Pre-fill with "0" or decimal appropriate format
+            if metric == .water {
+                inputText = "0.0"
+            } else if metric == .weight {
+                inputText = "0.0"
+            } else {
+                inputText = "0"
+            }
+        }
     }
-    
-    private func calculatePlaceholder() -> String {
-        return "0.0"
-    }
-    
-    private var displayUnit: String {
+
+    private func formatForDisplay(_ val: Double) -> String {
         switch metric {
-        case .water: return "L"
-        case .weight: return "kg"
-        case .steps: return "steps"
+        case .water:  return String(format: "%.1f", val)
+        case .weight: return String(format: "%.1f", val)
+        case .steps:  return String(format: "%.0f", val)
         }
-    }
-    
-    private var quickUnit: String {
-        switch metric {
-        case .water: return "ml"
-        case .weight: return "kg"
-        case .steps: return ""
-        }
-    }
-    
-    private func formatQuick(_ val: Double) -> String {
-        return String(format: "%.0f", val)
     }
 }

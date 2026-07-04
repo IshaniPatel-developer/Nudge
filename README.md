@@ -1,6 +1,28 @@
 # Nudge - GLP-1 Titration & Lifestyle Companion
 
-Nudge is a SwiftUI companion application designed for users tracking weekly GLP-1 injection doses alongside daily lifestyle metrics (Water, Protein, Steps). Built using **Clean Architecture** and **MVVM** design patterns, the app follows standard industry engineering practices, avoiding singletons and AI patterns.
+Nudge is a SwiftUI companion application designed for users tracking weekly GLP-1 injection doses alongside daily lifestyle metrics (Water, Steps, Weight). Built using **Clean Architecture** and **MVVM** design patterns, the app follows standard industry engineering practices, avoiding global state singletons or untested frameworks.
+
+---
+
+## Key Features
+
+1. **GLP-1 Dose Tracking & Calculations**
+   - **Step-up Schedule**: Computes next titration date and dosage amount dynamically (increases every 4 weeks) using clinical protocol schedules (0.25mg → 0.5mg → 1.0mg → 1.7mg → 2.4mg).
+   - **Double-Button Action Card**: Log injections directly on the dashboard:
+     - **Log Taken**: Instantly log today's dose.
+     - **Log Missed**: Record a missed weekly injection.
+     - **Back-date**: Select a historical date using a calendar view.
+   - **Dynamic Timeline**: Displays visually responsive progress indicators showing what steps are completed, what is active, and what is upcoming.
+
+2. **Lifestyle Vitals Tracking**
+   - Track three key health metrics: **Water (ml)**, **Steps (count)**, and **Weight (kg)**.
+   - **Visual Telemetry**: Features premium circular progress rings and a dynamic 7-day trend bar graph showing partial/completed goals.
+   - **Inline Value Editing**: Seamless edit functionality via a low-profile **pencil icon** next to each status value (e.g. `1.1L of 2.5L ✎`), completely replacing bulky action buttons.
+
+3. **Premium UX & Design System**
+   - **Inter Font Family**: Custom-loaded geometric typeface integrated across all elements with a safe fallback mechanism.
+   - **Content-Sized Bottom Sheets**: Clean bottom sheets that auto-resize dynamically to wrap content perfectly (no empty/transparent top-half screens).
+   - **Dark Mode Aesthetics**: Sleek glassmorphic components (`.glassCard()`) and vibrant color gradients customized per metric.
 
 ---
 
@@ -28,7 +50,6 @@ The application is built on **Clean Architecture**, enforcing a strict unidirect
 ```
 
 1. **Domain Layer (Core)**: 
-   - Entirely independent of UI frameworks (except SwiftUI gradients on lightweight configuration enums) and database layers.
    - Contains pure business models (`DoseSchedule`, `DoseLog`, `LifestyleLog`), repository abstractions, and UseCases that coordinate operations.
    - The titration progression schedule is dynamically computed rather than hardcoded.
 
@@ -40,7 +61,6 @@ The application is built on **Clean Architecture**, enforcing a strict unidirect
 3. **Presentation Layer**:
    - SwiftUI views utilizing a dedicated Router for navigation.
    - Decoupled ViewModels that interact strictly with UseCases.
-   - Fully supports **Dynamic Type**, **Safe Areas**, and **Dark/Light Mode** rendering.
    - Built-in custom ViewModifiers (e.g. `.glassCard()`) and reusable controls (`ProgressRing`, `PrimaryButton`, `CountdownView`).
 
 4. **Dependency Injection & Routing**:
@@ -57,7 +77,7 @@ Nudge/
 │   ├── NudgeApp.swift          # Main App entry point
 │   └── CompositionRoot.swift   # Composition root managing dependencies
 ├── Core/
-│   ├── Theme/                  # Dynamic colors, gradient catalogs, typography
+│   ├── Theme/                  # Dynamic colors, gradient catalogs, typography (Inter)
 │   ├── Utilities/              # Formatting extensions, ViewState types, Date helpers
 │   ├── Extensions/             # View modifiers (e.g. GlassCard)
 │   └── Components/             # Reusable UI elements (Rings, Buttons, headers)
@@ -72,7 +92,7 @@ Nudge/
     ├── Navigation/             # Navigation path state routers (AppRouter)
     └── Features/               # Modular features
         ├── Dashboard/          # Dashboard weekly schedules & metrics log list
-        └── Analytics/          # Swift Charts trend visualizer
+        └── Lifestyle/          # Daily vitals, log screens, and trend bar charts
 ```
 
 ---
@@ -88,27 +108,13 @@ Nudge/
    ```bash
    open Nudge.xcodeproj
    ```
-2. Select the `Nudge` scheme and choose a simulator (e.g., iPhone 17).
+2. Select the `Nudge` scheme and choose a simulator (e.g., iPhone 17 Pro).
 3. Press `CMD + R` to compile and run.
-4. Alternatively, to run via Terminal:
+4. Alternatively, to build and run via Terminal:
    ```bash
-   # Boot simulator (iPhone 17)
-   open -a Simulator
-   xcrun simctl bootstatus "iPhone 17"
-   
-   # Build for simulator
-   xcodebuild -project Nudge.xcodeproj -scheme Nudge -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17' build
-   
-   # Install and run
-   xcrun simctl install booted ~/Library/Developer/Xcode/DerivedData/Nudge-*/Build/Products/Debug-iphonesimulator/Nudge.app
-   xcrun simctl launch booted com.Nudge
+   # Build the project
+   xcodebuild -project Nudge.xcodeproj -scheme Nudge -destination 'generic/platform=iOS Simulator' build
    ```
-
-### Running Unit Tests
-To execute the suite of unit tests verifying titration math, date countdowns, and completion metrics:
-```bash
-xcodebuild test -project Nudge.xcodeproj -scheme Nudge -destination 'platform=iOS Simulator,name=iPhone 17'
-```
 
 ---
 
@@ -125,14 +131,3 @@ xcodebuild test -project Nudge.xcodeproj -scheme Nudge -destination 'platform=iO
 3. **No Third-Party Dependencies**:
    - *Decision*: The app uses native SwiftUI elements, Swift Charts, and Swift Concurrency exclusively.
    - *Trade-off*: Avoids bundle size bloat and target link issues. Custom progress rings and glassmorphic treatments are built manually to maintain high visual appeal and premium feedback.
-
----
-
-## Future Improvements
-
-1. **Persistency Integration**:
-   - Swap mock repositories for SwiftData or CoreData implementations to persist logged injections and daily metrics across launches.
-2. **Apple HealthKit Sync**:
-   - Bind steps and water logging directly to HealthKit so steps update automatically in the background without requiring manual logs.
-3. **Local Push Notifications**:
-   - Schedule notifications to alert users when their GLP-1 countdown is reaching zero, or to nudge them to log their lifestyle statistics in the evening.

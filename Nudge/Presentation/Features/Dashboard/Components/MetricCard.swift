@@ -25,7 +25,7 @@ public struct MetricCard: View {
                 ProgressRing(
                     progress: currentValue / metric.dailyTarget,
                     gradient: metric.gradient,
-                    iconName: metric.iconName,
+                    customAssetName: metric.customAssetName,
                     lineWidth: 7
                 )
                 .frame(width: 52, height: 52)

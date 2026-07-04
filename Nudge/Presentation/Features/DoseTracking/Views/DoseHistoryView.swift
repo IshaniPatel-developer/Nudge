@@ -51,6 +51,7 @@ public struct DoseHistoryView: View {
                             UpcomingDoseRow(date: state.nextDoseDate, dose: state.activeDose)
                         }
                         .padding(.horizontal)
+                        .padding(.bottom, 150)
                     }
                 case .error(let message):
                     ErrorView(message: message) {
