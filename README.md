@@ -91,8 +91,10 @@ Nudge/
 └── Presentation/
     ├── Navigation/             # Navigation path state routers (AppRouter)
     └── Features/               # Modular features
-        ├── Dashboard/          # Dashboard weekly schedules & metrics log list
-        └── Lifestyle/          # Daily vitals, log screens, and trend bar charts
+        ├── Dashboard/          # Dashboard weekly schedules & metrics overview
+        ├── DoseTracking/       # Injections tracking, history lists, log screens
+        ├── Lifestyle/          # Daily vitals, log sheets, custom 3D asset cards
+        └── Analytics/          # Swift Charts trend analysis and progress insights
 ```
 
 ---
